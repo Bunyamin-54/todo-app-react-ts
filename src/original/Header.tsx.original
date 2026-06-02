@@ -1,0 +1,4 @@
+function Header() {
+  return <div className="header">My Todo App With Typescript</div>;
+}
+export default Header

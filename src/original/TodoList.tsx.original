@@ -1,0 +1,94 @@
+import type React from "react";
+import type { ITodo } from "../ts/todos";
+import { useState } from "react";
+
+interface ITodoListProps {
+  todos: ITodo[];
+  setTodos: React.Dispatch<React.SetStateAction<ITodo[]>>;
+}
+
+export default function TodoList({ todos, setTodos }: ITodoListProps) {
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editValue, setEditValue] = useState("");
+
+  return (
+    <div>
+      {todos.map((todo) => (
+        <div
+          key={todo.id}
+          className="todo-list flex items-center justify-between p-2 border-b"
+        >
+          {editingId === todo.id ? (
+            <div>
+              <input
+                value={editValue}
+                onChange={(e) => setEditValue(e.target.value)}
+              />
+
+              <button
+                onClick={() => {
+                  setTodos((prev) =>
+                    prev.map((t) =>
+                      t.id === todo.id ? { ...t, task: editValue } : t,
+                    ),
+                  );
+                  setEditingId(null);
+                  setEditValue("");
+                }}
+              >
+                Save
+              </button>
+
+              <button
+                onClick={() => {
+                  setEditingId(null);
+                  setEditValue("");
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <>
+              <span className={todo.isDone ? "line-through text-gray-500" : ""}>
+                {todo.task}
+              </span>
+
+              <button
+                className="text-green-500"
+                onClick={() => {
+                  setTodos((prev) =>
+                    prev.map((t) =>
+                      t.id === todo.id ? { ...t, isDone: !t.isDone } : t,
+                    ),
+                  );
+                }}
+              >
+                {todo.isDone ? "Undo" : "Completed"}
+              </button>
+
+              <button
+                className="text-blue-500"
+                onClick={() => {
+                  setEditingId(todo.id);
+                  setEditValue(todo.task);
+                }}
+              >
+                Edit
+              </button>
+
+              <button
+                className="text-red-500"
+                onClick={() =>
+                  setTodos((prev) => prev.filter((t) => t.id !== todo.id))
+                }
+              >
+                Delete
+              </button>
+            </>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
