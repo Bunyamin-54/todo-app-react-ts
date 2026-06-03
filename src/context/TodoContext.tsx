@@ -1,12 +1,12 @@
-import {createContext} from "react"
+import React, {createContext} from "react"
 
  
- const TodoContext = createContext(undefined);
+ const TodoContext = createContext(null);
  
 
- export function TodoProvider(){
+ export function TodoProvider({children}: {children:React.ReactNode}){
 
 
-  return <TodoContext.Provider value={{}}> </TodoContext.Provider>
+  return <TodoContext.Provider value={{}}>{children} </TodoContext.Provider>
 
  }
